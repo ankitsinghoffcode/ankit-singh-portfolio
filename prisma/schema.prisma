@@ -1,0 +1,81 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String?
+  password  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([email])
+}
+
+model Project {
+  id                String   @id @default(cuid())
+  caseId            String   @unique
+  client            String
+  businessDomain    String
+  caseDescription   String
+  providedByOrg     Boolean
+  timeRating        Boolean
+  qualityRating     Boolean
+  quantityRating    Boolean
+  problemStatement  String
+  selectedSolution  String
+  projectNumber     String
+  projectName       String
+  businessProblem   String
+  suggestedSolution String
+  valueDelivered    String
+  businessImpact    String?
+  technologies      String[] @default([])
+  role              String?
+  teamSize          String?
+  duration          String?
+  metrics           Json?
+  featured          Boolean   @default(false)
+  slug              String    @unique
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+
+  @@index([client])
+  @@index([businessDomain])
+  @@index([featured])
+  @@index([slug])
+}
+
+model Contact {
+  id        String   @id @default(cuid())
+  name      String
+  email     String
+  subject   String?
+  message   String
+  createdAt DateTime @default(now())
+}
+
+model Resume {
+  id         String   @id @default(cuid())
+  filename   String
+  url        String
+  content    String?  @db.Text
+  updatedAt  DateTime @updatedAt
+}
+
+model PasswordResetToken {
+  id        String   @id @default(cuid())
+  email     String
+  token     String   @unique
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  @@index([email])
+  @@index([token])
+}
